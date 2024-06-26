@@ -1,0 +1,18 @@
+
+Pentru ficare pachet pe care routerul il receptioneaza se trece prin urmatorii pasi:
+-se verifica ca adresa mac destinatie apartine routerului. In coz contrar pachetul e aruncat
+-se verifica corectitudinea checksum-ul. Daca e incorect, pachetul e aruncat
+-daca pachetul are ip_dest router-ul(echo request), se contruieste un pachet icmp de tip echo replay si e trimis inapoi catre sender 
+-altfel, ttl e decrementat si se trece la pusul urmator. Daca insa ttl ajunge 0, headerul ip si payloadul pachetului original sunt shiftate in interiorul bufferului pentru a face loc unui nou header ip si a unui header icmp. Se recompleteaza headerul ethernet, se completeza headerul ip si headerul icmp de tip timeout si se trimite pachetul construit acesta avand ca payload vechiul header ip si primii 64 de biti din payloadul pachetul original 
+-Se cauta cea mai buna ruta pe care trebuie trimis pachetul(Longest prefix match).Daca nu se gasesti nicio ruta, se contruitest un pachet icmp de tip destination unreacheable in acelasi mod ca in cauzul anterior si e trimis catre sender
+- se recalculeaza checksum-ul
+- daca in tabela mac se gaseste adresa mac a next_hop-ului, se completeaza headerul ethernet cu aceasta si se expediaza pachetul.
+Daca insa nu exista, se salveaza in coda pachetul, lungimea lui si ruta pe care trebuie expediat. Se seteaza mac desinatie pe broadcast si se completeaza headerul ip pentru un arp request si se expediaza pachetul nou constuit pe ruta pe care trebuia expediat pachetul salvat.
+
+-cand se primeste un pachet arp replay, se retine adresa mac sursa a acestuia in tabela mac si se scot pe rand pachete din coada si se expediaza cele pentru care acum se cunoaste adresa mac a next_hop-ului, iar restul pachetelor sunt puse intr-o coada auxiliara catre care prima coada a fi pusa sa pointeze dupa ce se goleste in urma verificarilor.
+-cand se primeste un pachet arp request adresat routerului, se intoarce un pachet arp reply cu adresa mac sursa completata cu adresa mac a interfetei pe care s-a primit pachetul
+
+La citirea in memorie a tabelei de rutare sunt numarate intrarile dupa lunginea mascii, iar dupa tabela este sortata crescator dupa lungimea mascii si dupa IP, asfel se poate obtine indexul la care incep adresele fiecarei lungime posibile a mastii(de la 0 la 32). Longest prefix match consta in maxim 32 de cautari binare, cate una pentru fiecare lungime posibila a mascii O(32 * log n)
+
+Cerinte rezolvate:
+-toate
