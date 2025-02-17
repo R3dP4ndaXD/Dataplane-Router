@@ -12,7 +12,7 @@ Daca insa nu exista, se salveaza in coda pachetul, lungimea lui si ruta pe care 
 -cand se primeste un pachet arp replay, se retine adresa mac sursa a acestuia in tabela mac si se scot pe rand pachete din coada si se expediaza cele pentru care acum se cunoaste adresa mac a next_hop-ului, iar restul pachetelor sunt puse intr-o coada auxiliara catre care prima coada a fi pusa sa pointeze dupa ce se goleste in urma verificarilor.
 -cand se primeste un pachet arp request adresat routerului, se intoarce un pachet arp reply cu adresa mac sursa completata cu adresa mac a interfetei pe care s-a primit pachetul
 
-La citirea in memorie a tabelei de rutare sunt numarate intrarile dupa lunginea mascii, iar dupa tabela este sortata crescator dupa lungimea mascii si dupa IP, asfel se poate obtine indexul la care incep adresele fiecarei lungime posibile a mastii(de la 0 la 32). Longest prefix match consta in maxim 32 de cautari binare, cate una pentru fiecare lungime posibila a mascii O(32 * log n)
+La citirea in memorie a tabelei de rutare sunt numarate intrarile dupa lunginea mascii, iar dupa tabela este sortata crescator dupa lungimea mascii si dupa IP, asfel se poate obtine indexul la care incep adresele fiecarei lungime posibile a mastii(de la 0 la 32). Longest prefix match consta in maxim 32 de cautari binare, cate una pentru fiecare lungime posibila a mascii O(log n)
 
 Cerinte rezolvate:
 -toate
